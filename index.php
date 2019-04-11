@@ -72,7 +72,7 @@
 
                     <label class="checkbox">
                         <!--добавить сюда аттрибут "checked", если переменная $show_complete_tasks равна единице-->
-                        <input class="checkbox__input visually-hidden show_completed" type="checkbox" <?=$show_complete_tasks === 1 ? 'checked' : '';?>>
+                        <input class="checkbox__input visually-hidden show_completed" type="checkbox" <?= $show_complete_tasks == 1 ? 'checked' : '' ?>>
                         <span class="checkbox__text">Показывать выполненные</span>
                     </label>
                 </div>
@@ -92,8 +92,10 @@
 
                         <td class="task__date"></td>
                     </tr>
-                    <?php if ($show_complete_tasks === 1): ?>
-                    <tr class="tasks__item task task--completed">
+                    <?php
+                        if ($show_complete_tasks == 1) {
+                    ?>
+                     <tr class="tasks__item task task--completed">
                         <td class="task__select">
                             <label class="checkbox task__checkbox">
                                 <input class="checkbox__input visually-hidden" type="checkbox" checked>
@@ -105,7 +107,9 @@
                         <td class="task__controls">
                         </td>
                     </tr>
-                    <?php endif; ?>
+                    <?php
+                       }
+                    ?>
                 </table>
             </main>
         </div>
