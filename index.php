@@ -46,13 +46,23 @@
         ],
     ];
 
-    function calculateTasks($tasksList, $projectTitle) {
+    /**
+     * calculateTasks
+     *
+     * @param  array $tasksList
+     * @param  string $projectTitle
+     *
+     * @return int
+     */
+    function calculateTasks(array $tasksList, string $projectTitle): int
+    {
         $counter = 0;
         foreach($tasksList as $key => $task) {
             if ($task['category'] == $projectTitle) {
                 $counter++;
             }
         }
+
         return $counter;
     };
 ?>
