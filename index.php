@@ -49,7 +49,7 @@
     function calculateTasks($tasksList, $projectTitle) {
         $counter = 0;
         foreach($tasksList as $key => $task) {
-            if ($task['category'] === $projectTitle) {
+            if ($task['category'] == $projectTitle) {
                 $counter++;
             }
         }
