@@ -45,6 +45,26 @@
             'category' => 'Домашние дела'
         ],
     ];
+
+    /**
+     * calculateTasks
+     *
+     * @param  array $tasksList
+     * @param  string $projectTitle
+     *
+     * @return int
+     */
+    function calculateTasks(array $tasksList, string $projectTitle): int
+    {
+        $counter = 0;
+        foreach($tasksList as $key => $task) {
+            if ($task['category'] == $projectTitle) {
+                $counter++;
+            }
+        }
+
+        return $counter;
+    };
 ?>
 <!DOCTYPE html>
 <html lang="ru">
@@ -89,7 +109,7 @@
                         <?php foreach ($projects as $key => $project) { ?>
                         <li class="main-navigation__list-item">
                             <a class="main-navigation__list-item-link" href="#"><?= $project ?></a>
-                            <span class="main-navigation__list-item-count">0</span>
+                            <span class="main-navigation__list-item-count"><?= calculateTasks($tasks, $project) ?></span>
                         </li>
                         <?php } ?>
                     </ul>
