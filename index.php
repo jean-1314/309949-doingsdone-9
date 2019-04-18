@@ -8,28 +8,28 @@ $tasks = [
     [
         'id' => 100,
         'title' => 'Собеседование в IT компании',
-        'deadline' => '01.12.2018',
+        'deadline' => '08.05.2019',
         'is_completed' => false,
         'category' => 'Работа'
     ],
     [
         'id' => 101,
         'title' => 'Выполнить тестовое задание',
-        'deadline' => '25.12.2018',
+        'deadline' => '25.04.2019',
         'is_completed' => false,
         'category' => 'Работа'
     ],
     [
         'id' => 102,
         'title' => 'Сделать задание первого раздела',
-        'deadline' => '21.12.2018',
+        'deadline' => '21.04.2019',
         'is_completed' => true,
         'category' => 'Учеба'
     ],
     [
         'id' => 103,
         'title' => 'Встреча с другом',
-        'deadline' => '22.12.2018',
+        'deadline' => '19.04.2019',
         'is_completed' => false,
         'category' => 'Входящие'
     ],
@@ -68,6 +68,34 @@ function calculateTasks(array $tasksList, string $projectTitle): int
 
     return $counter;
 };
+
+/**
+ * calculateTimeToDeadline
+ *
+ * @param  string $tsString
+ *
+ * @return string
+ */
+function calculateTimeToDeadline(string $tsString): string
+{
+    $ts = time();
+    $taskTs = strtotime($tsString);
+    return $taskTs - $ts;
+}
+
+/**
+ * isDeadlineClose
+ *
+ * @param  string $taskDatetime
+ *
+ * @return boolean
+ */
+function isDeadlineClose(string $taskDatetime): bool
+{
+    $hoursInDay = 3600;
+    $hoursToDeadline = 24;
+    return floor(calculateTimeToDeadline($taskDatetime) / $hoursInDay) < $hoursToDeadline;
+}
 
 $page_content = include_template('index.php', [
     'projects' => $projects,
