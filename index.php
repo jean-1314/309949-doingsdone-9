@@ -78,9 +78,9 @@ function calculateTasks(array $tasksList, string $projectTitle): int
  */
 function calculateTimeToDeadline(string $tsString): string
 {
-    $ts = time();
+    $currentTimeStamp = time();
     $taskTs = strtotime($tsString);
-    return $taskTs - $ts;
+    return $taskTs - $currentTimeStamp;
 }
 
 /**
