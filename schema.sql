@@ -1,0 +1,30 @@
+CREATE DATABASE doingsdone
+ DEFAULT CHARACTER SET utf8
+ DEFAULT COLLATE utf8_general_ci;
+
+USE doingsdone;
+
+CREATE TABLE users (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  email CHAR(128) NOT NULL UNIQUE,
+  password CHAR(64),
+  name CHAR(128) NOT NULL,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE projects (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  title TEXT NOT NULL
+);
+
+CREATE TABLE tasks (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  title CHAR(128) NOT NULL,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  status TINYINT NOT NULL DEFAULT 0,
+  file_id INT,
+  deadline TIMESTAMP
+);
+
+CREATE UNIQUE INDEX u_email ON users(email);
+CREATE INDEX t_title ON tasks(title);
