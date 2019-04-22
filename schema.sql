@@ -25,7 +25,6 @@ CREATE TABLE tasks (
   status TINYINT NOT NULL DEFAULT 0,
   file_name CHAR(128),
   deadline TIMESTAMP,
-  author_id INT NOT NULL,
   project_id INT NOT NULL
 );
 
