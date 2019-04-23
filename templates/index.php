@@ -44,7 +44,7 @@
             <tr
                 class="tasks__item task
                 <?= $task['is_completed'] ? 'task--completed' : '' ?>
-                <?= $task['is_completed'] && $show_complete_tasks != 0 ? 'visually-hidden' : '' ?>
+                <?= $task['is_completed'] && !empty($show_complete_tasks) ? 'visually-hidden' : '' ?>
                 <?= $task['deadline'] && isDeadlineClose($task['deadline']) ? 'task--important' : '' ?>"
             >
                 <td class="task__select">
