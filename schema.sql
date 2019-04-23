@@ -15,7 +15,8 @@ CREATE TABLE users (
 CREATE TABLE projects (
   id INT AUTO_INCREMENT PRIMARY KEY,
   title TEXT NOT NULL,
-  author_id INT NOT NULL
+  author_id INT NOT NULL,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
 CREATE TABLE tasks (
