@@ -20,13 +20,27 @@ if (!$connection) {
 
     $projects = db_fetch_data($connection, $sql);
 
+    // Вытаскиваем первый айдишник проекта для дефолтной отрисовки
+    $sql = 'SELECT p.id FROM projects p WHERE p.author_id = 1 limit 1';
+    $firstProjectId = db_fetch_data($connection, $sql);
 
     // запрос на получение задач из полученных проектов
-    $sql = 'SELECT t.id, t.title, t.created_at, t.status, t.file_name, t.deadline, p.title AS project_title
-        FROM tasks t
-        INNER JOIN projects p
-        ON t.project_id = p.id
-        WHERE p.id = 1 OR p.id = 2';
+    $projectId = array_values($firstProjectId)[0]['id'];
+    $selectTaskSql = 'SELECT t.id, t.title, t.created_at, t.status, t.file_name, t.deadline, p.title AS project_title '
+    . 'FROM tasks t '
+    . 'INNER JOIN projects p '
+    . 'ON t.project_id = p.id ';
+
+    // Если параметра в урле нет, отрисовываем первый проект
+    if (isset($_GET['id'])) {
+        $projectId = mysqli_real_escape_string($connection, $_GET['id']);
+        $sql = $selectTaskSql
+        . 'WHERE p.id = "%s"';
+        $sql = sprintf($sql, $projectId);
+    } else {
+        $sql = $selectTaskSql
+        . 'WHERE p.id = ' . $projectId;
+    }
 
     $tasks = db_fetch_data($connection, $sql);
 }
