@@ -75,6 +75,26 @@ function db_get_prepare_stmt($link, $sql, $data = []) {
 }
 
 /**
+ * Функция получения записей с помощью подготовленного выражения
+ *
+ * @param $link mysqli Ресурс соединения
+ * @param $sql string SQL запрос с плейсхолдерами вместо значений
+ * @param array $data Данные для вставки на место плейсхолдеров
+ *
+ * @return $result array
+ */
+function db_fetch_data($link, $sql, $data = []): array {
+    $result = [];
+    $stmt = db_get_prepare_stmt($link, $sql, $data);
+    mysqli_stmt_execute($stmt);
+    $res = mysqli_stmt_get_result($stmt);
+    if ($res) {
+        $result = mysqli_fetch_all($res, MYSQLI_ASSOC);
+    }
+    return $result;
+}
+
+/**
  * Возвращает корректную форму множественного числа
  * Ограничения: только для целых чисел
  *
