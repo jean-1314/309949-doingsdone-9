@@ -20,26 +20,36 @@ if (!$connection) {
 
     $projects = db_fetch_data($connection, $sql);
 
-    // Вытаскиваем первый айдишник проекта для дефолтной отрисовки
-    $sql = 'SELECT p.id FROM projects p WHERE p.author_id = 1 limit 1';
-    $firstProjectId = db_fetch_data($connection, $sql);
+    // Вытаскиваем массив айдишников проектов пользователя
+    $sql = 'SELECT id FROM projects WHERE author_id = 1';
+    $projectIds = db_fetch_data($connection, $sql);
+
+    // Составляем одномерный массив айдишников из двумерного
+    foreach($projectIds as &$projectId) {
+        foreach($projectId as $id) {
+            $projectId = $id;
+        }
+    }
 
     // запрос на получение задач из полученных проектов
-    $projectId = array_values($firstProjectId)[0]['id'];
     $selectTaskSql = 'SELECT t.id, t.title, t.created_at, t.status, t.file_name, t.deadline, p.title AS project_title '
     . 'FROM tasks t '
     . 'INNER JOIN projects p '
     . 'ON t.project_id = p.id ';
 
-    // Если параметра в урле нет, отрисовываем первый проект
-    if (isset($_GET['id'])) {
+    // Если параметр в урле есть, отрисовываем все задачи внутри проекта
+    // Если параметр есть, но его нет в массиве айдишников $projectIds, стреляем 404. Чтобы нельзя было увидеть проекты другого пользователя.
+    // Если параметра нет, отрисовываем все задачи пользователя по всем проектам
+    if (isset($_GET['id']) && in_array($_GET['id'], $projectIds)) {
         $projectId = mysqli_real_escape_string($connection, $_GET['id']);
         $sql = $selectTaskSql
         . 'WHERE p.id = "%s"';
         $sql = sprintf($sql, $projectId);
+    } else if (isset($_GET['id']) && !in_array($_GET['id'], $projectIds)) {
+        http_response_code(404);
     } else {
         $sql = $selectTaskSql
-        . 'WHERE p.id = ' . $projectId;
+        . 'WHERE p.author_id = ' . 1;
     }
 
     $tasks = db_fetch_data($connection, $sql);
