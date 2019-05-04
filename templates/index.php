@@ -54,9 +54,11 @@
                     </label>
                 </td>
 
-                <!-- <td class="task__file">
-                    <a class="download-link" href="#">Home.psd</a>
-                </td> -->
+                <?php if ($task['file_name']) { ?>
+                    <td class="task__file">
+                        <a class="download-link" href="<?= '/' . $task['file_name'] ?>"><?= $task['file_name'] ?></a>
+                    </td>
+                <?php } ?>
 
                 <td class="task__date"><?= htmlspecialchars(date('d.m.Y', strtotime($task['deadline']))) ?></td>
 
