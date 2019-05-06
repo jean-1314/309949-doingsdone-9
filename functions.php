@@ -171,32 +171,35 @@ function getProjectIds($userId, $connection): array {
 
 
 /**
- * Запрос на получение задач из полученных проектов
- * Если параметр в урле есть, отрисовываем все задачи внутри проекта
- * Если параметр есть, но его нет в массиве айдишников $projectIds, стреляем 404. Чтобы нельзя было увидеть проекты другого пользователя.
- * Если параметра нет, отрисовываем все задачи пользователя по всем проектам
+ * Запрос на получение задач из проекта
  * @param  array $projectIds
  * @param  $connection mysqli Ресурс соединения
  *
  * @return array
  */
-function getTasksByProjectId($projectIds, $connection): array {
-    $selectTaskSql = 'SELECT t.id, t.title, t.created_at, t.status, t.file_name, t.deadline, p.title AS project_title '
-    . 'FROM tasks t '
-    . 'INNER JOIN projects p '
-    . 'ON t.project_id = p.id ';
+function getTasksByProjectId($queryId, $connection): array {
+    $sql = 'SELECT id, title, created_at, status, file_name, deadline '
+    . 'FROM tasks '
+    . 'WHERE project_id = "%s"'
+    . 'ORDER BY created_at DESC';
 
-    if (isset($_GET['id']) && in_array($_GET['id'], $projectIds)) {
-        $projectId = mysqli_real_escape_string($connection, $_GET['id']);
-        $sql = $selectTaskSql
-        . 'WHERE p.id = "%s"';
-        $sql = sprintf($sql, $projectId);
-    } else if (isset($_GET['id']) && !in_array($_GET['id'], $projectIds)) {
-        http_response_code(404);
-    } else {
-        $sql = $selectTaskSql
-        . 'WHERE p.author_id = ' . 1;
-    }
+    $projectId = mysqli_real_escape_string($connection, $queryId);
+    $sql = sprintf($sql, $projectId);
+
+    return db_fetch_data($connection, $sql);
+}
+
+/**
+ * Запрос на получение задач всех проектов одного пользователя
+ * @param  array $projectIds
+ * @param  $connection mysqli Ресурс соединения
+ *
+ * @return array
+ */
+function getTasksByUserProjects($projectIds, $connection): array {
+    $sql = 'SELECT id, title, created_at, status, file_name, deadline '
+    . 'FROM tasks WHERE project_id IN (' . implode(',', $projectIds) . ')'
+    . 'ORDER BY created_at DESC';
 
     return db_fetch_data($connection, $sql);
 }

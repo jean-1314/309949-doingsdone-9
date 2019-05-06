@@ -12,7 +12,14 @@ if (!$connection) {
 } else {
     $projects = getProjectsByUser(1, $connection);
     $projectIds = getProjectIds(1, $connection);
-    $tasks = getTasksByProjectId($projectIds, $connection);
+
+    if (isset($_GET['id']) && in_array($_GET['id'], $projectIds)) {
+        $tasks = getTasksByProjectId($_GET['id'], $connection);
+    } else if (isset($_GET['id']) && !in_array($_GET['id'], $projectIds)) {
+        http_response_code(404);
+    } else {
+        $tasks = getTasksByUserProjects($projectIds, $connection);
+    }
 }
 
 $page_content = include_template('index.php', [
