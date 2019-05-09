@@ -19,10 +19,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
     if (empty($errors)) {
         $email = mysqli_real_escape_string($connection, $form['email']);
-        $sql = "SELECT id FROM users WHERE email = '$email'";
+        $sql = "SELECT COUNT(*) as count FROM users WHERE email = '$email'";
         $res = mysqli_query($connection, $sql);
+        $emailQuantity = mysqli_fetch_row($res)[0];
 
-        if (mysqli_num_rows($res) > 0) {
+        if ($emailQuantity > 0) {
             $errors['email'] = 'Пользователь с этим email уже зарегистрирован';
         } else if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
             $errors['email'] = 'Введенный e-mail не является валидным.';
