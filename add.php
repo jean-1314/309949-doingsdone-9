@@ -58,7 +58,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
     if (empty($errors)) {
         $sql = 'INSERT INTO tasks (title, created_at, status, file_name, deadline, project_id) VALUES (?, NOW(), 0, ?, ?, ?)';
-        db_insert_data($connection, $sql, [$task['title'], $fileName, $task['date'], $task['project']]);
+        $result = db_insert_data($connection, $sql, [htmlspecialchars($task['title']), $fileName, htmlspecialchars($task['date']), htmlspecialchars($task['project'])]);
+        if ($result) {
+            header('Location: index.php');
+        }
     }
 }
 
@@ -70,7 +73,7 @@ $page_content = include_template('add.php', [
 
 $layout_content = include_template('layout.php', [
     'content' => $page_content,
-    'title' => 'Дела в порядке',
+    'title' => 'Дела в порядке | Добавление задачи',
     'userName' => $userName,
 ]);
 

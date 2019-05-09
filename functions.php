@@ -123,14 +123,13 @@ function db_fetch_data($link, $sql, $data = []): array {
  * @param $sql string SQL запрос с плейсхолдерами вместо значений
  * @param array $data Данные для вставки на место плейсхолдеров
  *
- * @return $result array
+ * @return $result integer
  */
-function db_insert_data($link, $sql, $data = []): array {
+function db_insert_data($link, $sql, $data = []): int {
     $stmt = db_get_prepare_stmt($link, $sql, $data);
     $result = mysqli_stmt_execute($stmt);
     if ($result) {
         $result = mysqli_insert_id($link);
-        header('Location: index.php');
     }
     return $result;
 }
