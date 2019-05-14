@@ -5,7 +5,7 @@ require_once('functions.php');
 
 session_start();
 
-$userData = isset($_SESSION['user']) ? $_SESSION['user'] : [];
+$userData = $_SESSION['user'] ?: [];
 
 $task = [];
 $errors = [];

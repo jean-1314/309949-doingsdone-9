@@ -21,14 +21,16 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $result = getUserByEmail($email, $connection);
     $user = $result[0] ?? null;
 
-    if (!count($errors) and $user) {
+    if (count($errors) == 0 && $user) {
         if (password_verify($form['password'], $user['password'])) {
             $_SESSION['user'] = $user;
         } else {
-            $errors['password'] = 'Неверный пароль';
+            $errors['email'] = 'Неверный email или пароль';
+            $errors['password'] = 'Неверный email или пароль';
         }
     } else {
-        $errors['email'] = 'Такой пользователь не найден';
+        $errors['email'] = 'Неверный email или пароль';
+        $errors['password'] = 'Неверный email или пароль';
     }
 
     $values = $form;
