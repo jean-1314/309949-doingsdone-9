@@ -9,7 +9,7 @@
 
     <form class="form" action="" method="post" autocomplete="off">
         <?php
-            $emailOrPasswordError = isset($wrongEmailOrPassword) && $wrongEmailOrPassword == true;
+            $emailOrPasswordError = isset($wrongEmailOrPassword) && $wrongEmailOrPassword;
             $errorClassActive = ((isset($errors['email'])) || $emailOrPasswordError);
         ?>
         <div class="form__row">

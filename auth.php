@@ -40,7 +40,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             'errors' => $errors,
             'values' => $values,
         ]);
-    } else if ($wrongEmailOrPassword == true) {
+    } else if ($wrongEmailOrPassword) {
         $page_content = include_template('auth.php', [
             'wrongEmailOrPassword' => $wrongEmailOrPassword,
             'wrongEmailOrPasswordText' => $wrongEmailOrPasswordText,
