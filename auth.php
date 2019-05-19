@@ -10,6 +10,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $required = ['email', 'password'];
     $errors = [];
     $values = [];
+    $wrongEmailOrPassword = false;
+    $wrongEmailOrPasswordText = 'Неверный логин или пароль';
 
 	foreach ($required as $field) {
 	    if (empty($form[$field])) {
@@ -25,12 +27,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         if (password_verify($form['password'], $user['password'])) {
             $_SESSION['user'] = $user;
         } else {
-            $errors['email'] = 'Неверный email или пароль';
-            $errors['password'] = 'Неверный email или пароль';
+            $wrongEmailOrPassword = true;
         }
     } else {
-        $errors['email'] = 'Неверный email или пароль';
-        $errors['password'] = 'Неверный email или пароль';
+        $wrongEmailOrPassword = true;
     }
 
     $values = $form;
@@ -39,6 +39,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $page_content = include_template('auth.php', [
             'errors' => $errors,
             'values' => $values,
+        ]);
+    } else if ($wrongEmailOrPassword == true) {
+        $page_content = include_template('auth.php', [
+            'wrongEmailOrPassword' => $wrongEmailOrPassword,
+            'wrongEmailOrPasswordText' => $wrongEmailOrPasswordText,
         ]);
     } else {
         header("Location: /");
