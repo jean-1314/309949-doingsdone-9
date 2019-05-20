@@ -3,7 +3,10 @@ require_once('init.php');
 require_once('helpers.php');
 require_once('functions.php');
 
-$userName = 'Иван';
+session_start();
+
+$userData = $_SESSION['user'] ?: [];
+
 $task = [];
 $errors = [];
 
@@ -11,8 +14,8 @@ if (!$connection) {
     $error = mysqli_connect_error();
     print('Что-то пошло не так. ' . $error);
 } else {
-    $projects = getProjectsByUser(1, $connection);
-    $projectIds = getProjectIds(1, $connection);
+    $projects = getProjectsByUser($userData['id'], $connection);
+    $projectIds = getProjectIds($userData['id'], $connection);
 }
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
@@ -74,7 +77,7 @@ $page_content = include_template('add.php', [
 $layout_content = include_template('layout.php', [
     'content' => $page_content,
     'title' => 'Дела в порядке | Добавление задачи',
-    'userName' => $userName,
+    'userData' => $userData,
 ]);
 
 print($layout_content);

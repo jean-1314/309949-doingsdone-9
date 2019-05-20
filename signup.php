@@ -34,7 +34,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $result = db_insert_data($connection, $sql, [htmlspecialchars($form['email']), htmlspecialchars($form['name']), $password]);
 
             if ($result && empty($errors)) {
-                header('Location: index.php');
+                header('Location: /auth.php');
             }
         }
     }

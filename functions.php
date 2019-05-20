@@ -202,3 +202,16 @@ function getTasksByUserProjects($projectIds, $connection): array {
 
     return db_fetch_data($connection, $sql);
 }
+
+/**
+ * Запрос на получение данных пользователя по его email
+ *
+ * @param  string $email
+ * @param  $connection mysqli Ресурс соединения
+ *
+ * @return array
+ */
+function getUserByEmail($email, $connection): array {
+    $sql = "SELECT * FROM users WHERE email ='$email'";
+    return db_fetch_data($connection, $sql);
+}
