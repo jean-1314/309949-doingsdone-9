@@ -13,7 +13,7 @@
     </nav>
 
     <a class="button button--transparent button--plus content__side-button"
-        href="pages/form-project.html" target="project_add">Добавить проект</a>
+        href="/add-project.php">Добавить проект</a>
 </section>
 
 <main class="content__main">
@@ -27,10 +27,18 @@
 
     <div class="tasks-controls">
         <nav class="tasks-switch">
-            <a href="/" class="tasks-switch__item tasks-switch__item--active">Все задачи</a>
-            <a href="/" class="tasks-switch__item">Повестка дня</a>
-            <a href="/" class="tasks-switch__item">Завтра</a>
-            <a href="/" class="tasks-switch__item">Просроченные</a>
+            <?php
+                function setFilter($filter):string {
+                    return isset($_GET['id']) ? '?id=' . $_GET['id'] . '&filter=' . $filter : '?filter=' . $filter;
+                }
+                function isActive($filter):string {
+                    return isset($_GET['filter']) && $_GET['filter'] == $filter;
+                }
+            ?>
+            <a href="<?= isset($_GET['id']) ? '?id=' . $_GET['id'] : '/' ?>" class="tasks-switch__item <?= isset($_GET['filter']) ?: 'tasks-switch__item--active' ?>">Все задачи</a>
+            <a href="<?= setFilter('today') ?>" class="tasks-switch__item <?= isActive('today') ? 'tasks-switch__item--active' : '' ?>">Повестка дня</a>
+            <a href="<?= setFilter('tomorrow') ?>" class="tasks-switch__item <?= isActive('tomorrow') ? 'tasks-switch__item--active' : '' ?>">Завтра</a>
+            <a href="<?= setFilter('expired') ?>" class="tasks-switch__item <?= isActive('expired') ? 'tasks-switch__item--active' : '' ?>">Просроченные</a>
         </nav>
 
         <label class="checkbox">
@@ -49,7 +57,7 @@
             >
                 <td class="task__select">
                     <label class="checkbox task__checkbox">
-                        <input class="checkbox__input visually-hidden task__checkbox" type="checkbox" <?= $task['status'] == 1 ? 'checked' : '' ?>>
+                        <input class="checkbox__input visually-hidden task__checkbox" type="checkbox" value="<?= $task['id'] ?>" <?= $task['status'] == 1 ? 'checked' : '' ?>>
                         <span class="checkbox__text"><?= htmlspecialchars($task['title']) ?></span>
                     </label>
                 </td>

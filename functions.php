@@ -168,10 +168,22 @@ function getProjectIds($userId, $connection): array {
     return array_column(db_fetch_data($connection, $sql), 'id');
 }
 
+/**
+ * Вытаскиваем массив названий проектов пользователя для проверки на совпадения,
+ * Составляем одномерный массив названий из двумерного
+ * @param  int $userId
+ * @param  $connection mysqli Ресурс соединения
+ *
+ * @return array
+ */
+function getProjectTitles($userId, $connection): array {
+    $sql = 'SELECT title FROM projects WHERE author_id = ' . $userId;
+    return array_column(db_fetch_data($connection, $sql), 'title');
+}
 
 /**
  * Запрос на получение задач из проекта
- * @param  array $projectIds
+ * @param  int $queryId
  * @param  $connection mysqli Ресурс соединения
  *
  * @return array
@@ -213,5 +225,59 @@ function getTasksByUserProjects($projectIds, $connection): array {
  */
 function getUserByEmail($email, $connection): array {
     $sql = "SELECT * FROM users WHERE email ='$email'";
+    return db_fetch_data($connection, $sql);
+}
+
+/**
+ * Вспомогательная функция получения фильтра по дате для строки запроса
+ *
+ * @param  string $filter
+ *
+ * @return string
+ */
+function createFilterQuery($filter): string {
+    switch ($filter) {
+        case 'today':
+            return 'DATE(deadline) = CURDATE()';
+        case 'tomorrow':
+            return 'DATE(deadline) = CURDATE() + INTERVAL 1 DAY';
+        case 'expired':
+            return 'DATE(deadline) < CURDATE()';
+        default:
+            return '';
+    }
+}
+
+/**
+ * Запрос на получение отфильтрованных задач всех проектов одного пользователя
+ * @param  array $projectIds
+ * @param  string $filter
+ * @param  $connection mysqli Ресурс соединения
+ *
+ * @return array
+ */
+function getTasksByFilter($projectIds, $filter, $connection): array {
+    $sql = 'SELECT id, title, created_at, status, file_name, deadline '
+    . 'FROM tasks '
+    . 'WHERE project_id IN (' . implode(',', $projectIds) . ')' . ' AND ' . createFilterQuery($filter)
+    . ' ORDER BY created_at DESC';
+
+    return db_fetch_data($connection, $sql);
+}
+
+/**
+ * Запрос на получение отфильтрованных задач всех проектов одного пользователя
+ * @param  int $projectId
+ * @param  string $filter
+ * @param  $connection mysqli Ресурс соединения
+ *
+ * @return array
+ */
+function getTasksByFilterAndId($projectId, $filter, $connection): array {
+    $sql = 'SELECT id, title, created_at, status, file_name, deadline '
+    . 'FROM tasks '
+    . 'WHERE project_id = ' . $projectId . ' AND ' . createFilterQuery($filter)
+    . ' ORDER BY created_at DESC';
+
     return db_fetch_data($connection, $sql);
 }
