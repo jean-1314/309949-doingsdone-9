@@ -6,7 +6,6 @@ require_once('functions.php');
 session_start();
 
 $userData = [];
-$show_complete_tasks = rand(0, 1);
 
 if (isset($_SESSION['user'])) {
     $userData = $_SESSION['user'];
@@ -18,6 +17,7 @@ if (isset($_SESSION['user'])) {
         $projectIdParamExists = isset($_GET['id']);
         $projects = getProjectsByUser($userData['id'], $connection);
         $projectIds = getProjectIds($userData['id'], $connection);
+        $show_completed_tasks = isset($_GET['show_completed']) ? $_GET['show_completed'] : 0;
 
         if ($projectIdParamExists && in_array($_GET['id'], $projectIds)) {
             $tasks = getTasksByProjectId($_GET['id'], $connection);
@@ -51,7 +51,7 @@ if (isset($_SESSION['user'])) {
     $page_content = include_template('index.php', [
         'projects' => $projects,
         'tasks' => $tasks,
-        'show_complete_tasks' => $show_complete_tasks,
+        'show_completed_tasks' => $show_completed_tasks,
     ]);
 } else {
     $page_content = include_template('guest.php');

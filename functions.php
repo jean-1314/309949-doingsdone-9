@@ -242,7 +242,7 @@ function createFilterQuery($filter): string {
         case 'tomorrow':
             return 'DATE(deadline) = CURDATE() + INTERVAL 1 DAY';
         case 'expired':
-            return 'DATE(deadline) < CURDATE()';
+            return 'DATE(deadline) < CURDATE() OR status = 1';
         default:
             return '';
     }

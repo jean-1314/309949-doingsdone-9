@@ -42,7 +42,7 @@
         </nav>
 
         <label class="checkbox">
-            <input class="checkbox__input visually-hidden show_completed" type="checkbox" <?= $show_complete_tasks == 1 ? 'checked' : '' ?>>
+            <input class="checkbox__input visually-hidden show_completed" type="checkbox" <?= $show_completed_tasks == 1 ? 'checked' : '' ?>>
             <span class="checkbox__text">Показывать выполненные</span>
         </label>
     </div>
@@ -52,7 +52,7 @@
             <tr
                 class="tasks__item task
                 <?= $task['status'] == 1 ? 'task--completed' : '' ?>
-                <?= $task['status'] == 1 && !empty($show_complete_tasks) ? 'visually-hidden' : '' ?>
+                <?= $task['status'] == 1 && $show_completed_tasks == 0 ? 'visually-hidden' : '' ?>
                 <?= $task['deadline'] && isDeadlineClose($task['deadline']) ? 'task--important' : '' ?>"
             >
                 <td class="task__select">
