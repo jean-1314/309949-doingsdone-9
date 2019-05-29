@@ -55,7 +55,7 @@ if (isset($_SESSION['user'])) {
                     . ' JOIN projects p ON p.id = t.project_id'
                     . ' WHERE p.author_id = ' . $userData['id']
                     . ' AND MATCH(t.title) AGAINST(?)';
-                $tasks = db_fetch_data($connection, $sql, [$_GET['search']]);
+                $tasks = db_fetch_data($connection, $sql, [trim($_GET['search'])]);
             }
         }
     }

@@ -11,7 +11,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $errors = [];
     $values = [];
     $wrongEmailOrPassword = false;
-    $wrongEmailOrPasswordText = 'Неверный логин или пароль';
+    $wrongEmailOrPasswordText = 'Вы ввели неверный email/пароль';
 
     foreach ($required as $field) {
         if (empty($form[$field])) {

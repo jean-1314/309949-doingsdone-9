@@ -72,6 +72,9 @@
         </div>
 
         <div class="form__row form__row--controls">
+            <?php if ($errors) { ?>
+                <p class="error-message">Пожалуйста, исправьте ошибки в форме</p>
+            <?php } ?>
             <input class="button" type="submit" name="" value="Добавить">
         </div>
     </form>
