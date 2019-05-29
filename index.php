@@ -21,9 +21,9 @@ if (isset($_SESSION['user'])) {
 
         if ($projectIdParamExists && in_array($_GET['id'], $projectIds)) {
             $tasks = getTasksByProjectId($_GET['id'], $connection);
-        } else if ($projectIdParamExists && !in_array($_GET['id'], $projectIds)) {
+        } elseif ($projectIdParamExists && !in_array($_GET['id'], $projectIds)) {
             http_response_code(404);
-        } else if (!empty($projectIds)) {
+        } elseif (!empty($projectIds)) {
             $tasks = getTasksByUserProjects($projectIds, $connection);
         } else {
             $tasks = [];
@@ -31,7 +31,7 @@ if (isset($_SESSION['user'])) {
 
         if (!$projectIdParamExists && isset($_GET['filter'])) {
             $tasks = getTasksByFilter($projectIds, $_GET['filter'], $connection);
-        } else if ($projectIdParamExists && isset($_GET['filter'])) {
+        } elseif ($projectIdParamExists && isset($_GET['filter'])) {
             $tasks = getTasksByFilterAndId($_GET['id'], $_GET['filter'], $connection);
         }
 

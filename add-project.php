@@ -27,7 +27,7 @@ if (isset($_SESSION['user'])) {
         if ($projectData['title'] == '') {
             $error = true;
             $errorText = 'Это поле надо заполнить';
-        } else if (in_array($projectData['title'], $projectTitles)) {
+        } elseif (in_array($projectData['title'], $projectTitles)) {
             $error = true;
             $errorText = 'Название проекта совпадает с названием одного из существующих проектов';
         }
@@ -40,7 +40,6 @@ if (isset($_SESSION['user'])) {
             }
         }
     }
-
 } else {
     header('Location: /');
 }

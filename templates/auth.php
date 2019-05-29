@@ -18,7 +18,7 @@
             <input class="form__input <?= $errorClassActive ? 'form__input--error' : '' ?>" type="text" name="email" id="email" value="<?= $values['email'] ?? '' ?>" placeholder="Введите e-mail">
             <?php if (isset($errors['email'])) { ?>
                 <p class="form__message"><?= $errors['email'] ?></p>
-            <?php } else if ($emailOrPasswordError) { ?>
+            <?php } elseif ($emailOrPasswordError) { ?>
                 <p class="form__message"><?= $wrongEmailOrPasswordText ?></p>
             <?php } ?>
         </div>
@@ -29,7 +29,7 @@
             <input class="form__input <?= $emailOrPasswordError ? 'form__input--error' : '' ?>" type="password" name="password" id="password" value="" placeholder="Введите пароль">
             <?php if (isset($errors['password'])) { ?>
                 <p class="form__message"><?= $errors['password'] ?></p>
-            <?php } else if ($emailOrPasswordError) { ?>
+            <?php } elseif ($emailOrPasswordError) { ?>
                 <p class="form__message"><?= $wrongEmailOrPasswordText ?></p>
             <?php } ?>
         </div>

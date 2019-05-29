@@ -1,0 +1,14 @@
+{
+    "name": "ivan/309949-doingsdone-9",
+    "description": "yet another to-do list",
+    "type": "project",
+    "authors": [
+        {
+            "name": "Ivan Savitsky",
+            "email": "ivan@savitsky.biz"
+        }
+    ],
+    "require": {
+        "swiftmailer/swiftmailer": "^6.2"
+    }
+}
