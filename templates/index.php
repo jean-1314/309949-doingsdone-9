@@ -28,10 +28,12 @@
     <div class="tasks-controls">
         <nav class="tasks-switch">
             <?php
-                function setFilter($filter):string {
+                function setFilter($filter):string
+                {
                     return isset($_GET['id']) ? '?id=' . $_GET['id'] . '&filter=' . $filter : '?filter=' . $filter;
                 }
-                function isActive($filter):string {
+                function isActive($filter):string
+                {
                     return isset($_GET['filter']) && $_GET['filter'] == $filter;
                 }
             ?>

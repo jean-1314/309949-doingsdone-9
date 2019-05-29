@@ -51,7 +51,8 @@ function isDateValid(string $date): bool
  *
  * @return mysqli_stmt Подготовленное выражение
  */
-function db_get_prepare_stmt($link, $sql, $data = []) {
+function db_get_prepare_stmt($link, $sql, $data = [])
+{
     $stmt = mysqli_prepare($link, $sql);
 
     if ($stmt === false) {
@@ -68,11 +69,9 @@ function db_get_prepare_stmt($link, $sql, $data = []) {
 
             if (is_int($value)) {
                 $type = 'i';
-            }
-            else if (is_string($value)) {
+            } elseif (is_string($value)) {
                 $type = 's';
-            }
-            else if (is_double($value)) {
+            } elseif (is_double($value)) {
                 $type = 'd';
             }
 
@@ -105,7 +104,8 @@ function db_get_prepare_stmt($link, $sql, $data = []) {
  *
  * @return $result array
  */
-function db_fetch_data($link, $sql, $data = []): array {
+function db_fetch_data($link, $sql, $data = []): array
+{
     $result = [];
     $stmt = db_get_prepare_stmt($link, $sql, $data);
     mysqli_stmt_execute($stmt);
@@ -125,7 +125,8 @@ function db_fetch_data($link, $sql, $data = []): array {
  *
  * @return $result integer
  */
-function db_insert_data($link, $sql, $data = []): int {
+function db_insert_data($link, $sql, $data = []): int
+{
     $stmt = db_get_prepare_stmt($link, $sql, $data);
     $result = mysqli_stmt_execute($stmt);
     if ($result) {
@@ -142,7 +143,8 @@ function db_insert_data($link, $sql, $data = []): int {
  *
  * @return array
  */
-function getProjectsByUser($userId, $connection): array {
+function getProjectsByUser($userId, $connection): array
+{
     $sql = 'SELECT p.id, p.title, p.created_at,
         (
             SELECT COUNT(*)
@@ -163,7 +165,8 @@ function getProjectsByUser($userId, $connection): array {
  *
  * @return array
  */
-function getProjectIds($userId, $connection): array {
+function getProjectIds($userId, $connection): array
+{
     $sql = 'SELECT id FROM projects WHERE author_id = ' . $userId;
     return array_column(db_fetch_data($connection, $sql), 'id');
 }
@@ -176,7 +179,8 @@ function getProjectIds($userId, $connection): array {
  *
  * @return array
  */
-function getProjectTitles($userId, $connection): array {
+function getProjectTitles($userId, $connection): array
+{
     $sql = 'SELECT title FROM projects WHERE author_id = ' . $userId;
     return array_column(db_fetch_data($connection, $sql), 'title');
 }
@@ -188,7 +192,8 @@ function getProjectTitles($userId, $connection): array {
  *
  * @return array
  */
-function getTasksByProjectId($queryId, $connection): array {
+function getTasksByProjectId($queryId, $connection): array
+{
     $sql = 'SELECT id, title, created_at, status, file_name, deadline '
     . 'FROM tasks '
     . 'WHERE project_id = "%s"'
@@ -207,7 +212,8 @@ function getTasksByProjectId($queryId, $connection): array {
  *
  * @return array
  */
-function getTasksByUserProjects($projectIds, $connection): array {
+function getTasksByUserProjects($projectIds, $connection): array
+{
     $sql = 'SELECT id, title, created_at, status, file_name, deadline '
     . 'FROM tasks WHERE project_id IN (' . implode(',', $projectIds) . ')'
     . 'ORDER BY created_at DESC';
@@ -223,7 +229,8 @@ function getTasksByUserProjects($projectIds, $connection): array {
  *
  * @return array
  */
-function getUserByEmail($email, $connection): array {
+function getUserByEmail($email, $connection): array
+{
     $sql = "SELECT * FROM users WHERE email ='$email'";
     return db_fetch_data($connection, $sql);
 }
@@ -235,7 +242,8 @@ function getUserByEmail($email, $connection): array {
  *
  * @return string
  */
-function createFilterQuery($filter): string {
+function createFilterQuery($filter): string
+{
     switch ($filter) {
         case 'today':
             return 'DATE(deadline) = CURDATE()';
@@ -256,7 +264,8 @@ function createFilterQuery($filter): string {
  *
  * @return array
  */
-function getTasksByFilter($projectIds, $filter, $connection): array {
+function getTasksByFilter($projectIds, $filter, $connection): array
+{
     $sql = 'SELECT id, title, created_at, status, file_name, deadline '
     . 'FROM tasks '
     . 'WHERE project_id IN (' . implode(',', $projectIds) . ')' . ' AND ' . createFilterQuery($filter)
@@ -273,11 +282,43 @@ function getTasksByFilter($projectIds, $filter, $connection): array {
  *
  * @return array
  */
-function getTasksByFilterAndId($projectId, $filter, $connection): array {
+function getTasksByFilterAndId($projectId, $filter, $connection): array
+{
     $sql = 'SELECT id, title, created_at, status, file_name, deadline '
     . 'FROM tasks '
     . 'WHERE project_id = ' . $projectId . ' AND ' . createFilterQuery($filter)
     . ' ORDER BY created_at DESC';
 
+    return db_fetch_data($connection, $sql);
+}
+
+/**
+ * Запрос на получение истекающих сегодня задач
+ * @param  array $projectIds
+ * @param  string $filter
+ * @param  $connection mysqli Ресурс соединения
+ *
+ * @return array
+ */
+function getUserTasksForEmail($connection, $userId): array
+{
+    $sql = 'SELECT t.title, t.status, DATE_FORMAT(t.deadline, "%d.%m.%Y") AS deadline FROM tasks t'
+    . ' JOIN projects p ON p.id = t.project_id'
+    . ' WHERE DATE(t.deadline) = CURDATE() AND t.status = 0'
+    . ' AND p.author_id = ' . $userId;
+
+    return db_fetch_data($connection, $sql);
+}
+
+/**
+ * Запрос на получение всех пользователей
+ *
+ * @param  $connection mysqli Ресурс соединения
+ *
+ * @return array
+ */
+function getAllUsers($connection): array
+{
+    $sql = "SELECT id, name, email FROM users";
     return db_fetch_data($connection, $sql);
 }

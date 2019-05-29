@@ -13,9 +13,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $wrongEmailOrPassword = false;
     $wrongEmailOrPasswordText = 'Неверный логин или пароль';
 
-	foreach ($required as $field) {
-	    if (empty($form[$field])) {
-	        $errors[$field] = 'Это поле надо заполнить';
+    foreach ($required as $field) {
+        if (empty($form[$field])) {
+            $errors[$field] = 'Это поле надо заполнить';
         }
     }
 
@@ -40,7 +40,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             'errors' => $errors,
             'values' => $values,
         ]);
-    } else if ($wrongEmailOrPassword) {
+    } elseif ($wrongEmailOrPassword) {
         $page_content = include_template('auth.php', [
             'wrongEmailOrPassword' => $wrongEmailOrPassword,
             'wrongEmailOrPasswordText' => $wrongEmailOrPasswordText,
@@ -58,7 +58,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 }
 
 $layout_content = include_template('layout.php', [
-	'content' => $page_content,
+    'content' => $page_content,
     'title' => 'Дела в порядке',
 ]);
 

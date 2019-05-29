@@ -25,7 +25,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
         if ($emailQuantity > 0) {
             $errors['email'] = 'Пользователь с этим email уже зарегистрирован';
-        } else if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+        } elseif (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
             $errors['email'] = 'Введенный e-mail не является валидным.';
         } else {
             $password = password_hash($form['password'], PASSWORD_DEFAULT);
