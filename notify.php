@@ -25,7 +25,7 @@ if (!empty($users)) {
             $message->setFrom(['keks@phpdemo.ru' => 'Дела в порядке']);
             $message->setTo($recipient);
 
-            if (count($tasks) == 1) {
+            if (count($tasks) === 1) {
                 $msg_content = 'Уважаемый(ая) ' . $user['name'] . '! У вас запланирована задача «' . $tasks[0]['title'] . '» на ' . $tasks[0]['deadline'];
                 $message->setBody($msg_content, 'text/plain');
             } elseif (count($tasks) > 1) {

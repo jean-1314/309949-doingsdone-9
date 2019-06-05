@@ -41,22 +41,20 @@ if (isset($_SESSION['user'])) {
 
             $sql = 'UPDATE tasks SET status = ' . $safeCheck . ' WHERE id = ' . $safeTaskId;
             $result = mysqli_query($connection, $sql);
+        }
 
-            if ($result) {
-                header('Location: index.php');
-            }
+        if ($result) {
+            header('Location: index.php');
         }
 
         if (isset($_GET['search'])) {
             mysqli_query($connection, 'CREATE FULLTEXT INDEX tasksFulltextSearch ON tasks(title)');
 
-            if ($_GET['search']) {
-                $sql = 'SELECT t.id, t.title, t.status, t.file_name, t.deadline, t.project_id FROM tasks t'
+            $sql = 'SELECT t.id, t.title, t.status, t.file_name, t.deadline, t.project_id FROM tasks t'
                     . ' JOIN projects p ON p.id = t.project_id'
                     . ' WHERE p.author_id = ' . $userData['id']
                     . ' AND MATCH(t.title) AGAINST(?)';
-                $tasks = db_fetch_data($connection, $sql, [trim($_GET['search'])]);
-            }
+            $tasks = db_fetch_data($connection, $sql, [trim($_GET['search'])]);
         }
     }
 

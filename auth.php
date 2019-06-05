@@ -5,7 +5,7 @@ require_once('functions.php');
 
 session_start();
 
-if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $form = $_POST;
     $required = ['email', 'password'];
     $errors = [];
@@ -23,7 +23,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $result = getUserByEmail($email, $connection);
     $user = $result[0] ?? null;
 
-    if (count($errors) == 0 && $user) {
+    if (count($errors) === 0 && $user) {
         if (password_verify($form['password'], $user['password'])) {
             $_SESSION['user'] = $user;
         } else {

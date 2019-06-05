@@ -3,11 +3,17 @@ require_once('init.php');
 require_once('helpers.php');
 require_once('functions.php');
 
+session_start();
+
 $userName = 'Иван';
 $errors = [];
 $values = [];
 
-if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+if (isset($_SESSION['user'])) {
+    header('Location: /');
+}
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $form = $_POST;
     $req_fields = ['email', 'password', 'name'];
 
@@ -32,10 +38,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
             $sql = 'INSERT INTO users (created_at, email, name, password) VALUES (NOW(), ?, ?, ?)';
             $result = db_insert_data($connection, $sql, [htmlspecialchars($form['email']), htmlspecialchars($form['name']), $password]);
+        }
 
-            if ($result && empty($errors)) {
-                header('Location: /auth.php');
-            }
+        if ($result && empty($errors)) {
+            header('Location: /auth.php');
         }
     }
     $values = $form;
