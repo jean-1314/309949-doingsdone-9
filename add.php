@@ -59,9 +59,10 @@ if ($_SERVER['REQUEST_METHOD'] ==='POST') {
         $date = $task['date'] === '' ? null : htmlspecialchars($task['date']);
         $sql = 'INSERT INTO tasks (title, created_at, status, file_name, deadline, project_id) VALUES (?, NOW(), 0, ?, ?, ?)';
         $result = db_insert_data($connection, $sql, [htmlspecialchars($task['title']), $fileName, $date, htmlspecialchars($task['project'])]);
-        if ($result) {
-            header('Location: index.php');
-        }
+    }
+
+    if ($result) {
+        header('Location: index.php');
     }
 }
 

@@ -6,6 +6,7 @@ require_once('functions.php');
 session_start();
 
 $userData = [];
+$result = null;
 
 if (isset($_SESSION['user'])) {
     $userData = $_SESSION['user'];
